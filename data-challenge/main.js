@@ -1,7 +1,3 @@
-function transform(data) {
-  console.log(data)
-}
-
 const start = {
   Clients: {
     171: { id: 171, name: 'John Smith', active: false },
@@ -40,4 +36,34 @@ const expected = [
   { label: 'Doc Docson', value: 1147, group: 'Doctors' },
 ];
 
-transform(start)
+function transform(data) {
+  let result = []
+  for(let group of Object.keys(data)) {
+    for(let key of Object.keys(data[group])) {
+      if(data[group][key].active) {
+        let temp = {}
+        temp.label = data[group][key].name
+        temp.value = data[group][key].id
+        temp.group = group
+        result.push(temp)
+      }
+    }
+  }
+  return result.sort((a, b) => {
+    if (a.group.toLowerCase() > b.group.toLowerCase()) {
+      return 1
+    }
+    if (a.group.toLowerCase() < b.group.toLowerCase()) {
+      return -1
+    }
+    if (a.group.toLowerCase() === b.group.toLowerCase()) {
+      if(a.label.toLowerCase() > b.label.toLowerCase()) {
+        return 1
+      }
+      if(a.label.toLowerCase() < b.label.toLowerCase()) {
+        return -1
+      }
+      return 0
+    }
+  })
+}
